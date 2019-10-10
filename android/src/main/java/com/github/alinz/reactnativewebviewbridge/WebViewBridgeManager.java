@@ -402,11 +402,11 @@ public class WebViewBridgeManager extends SimpleViewManager<WebViewBridgeManager
             return super.shouldInterceptRequest(view, request);
         }
 
-           @Override
-    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-     // this method is needed to ignore SSL certificate errors if you are visiting https website 
-        handler.proceed(); 
-    }
+    //        @Override
+    // public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+    //  // this method is needed to ignore SSL certificate errors if you are visiting https website 
+    //     handler.proceed(); 
+    // }
         
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
