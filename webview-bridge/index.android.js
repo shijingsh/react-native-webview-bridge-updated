@@ -70,6 +70,9 @@ var WebViewBridge = createReactClass({
 
 
   componentWillMount: function () {
+    DeviceEventEmitter.removeListener('webViewBridgeMessage')
+
+
     DeviceEventEmitter.addListener("webViewBridgeMessage", (body) => {
       console.log(body)
       const { onBridgeMessage } = this.props;
@@ -82,6 +85,10 @@ var WebViewBridge = createReactClass({
     if (this.props.startInLoadingState) {
       this.setState({ viewState: WebViewBridgeState.LOADING });
     }
+  },
+
+  componentWillUnmount() {
+    DeviceEventEmitter.removeAllListeners('webViewBridgeMessage')
   },
 
   render: function () {
@@ -142,9 +149,7 @@ var WebViewBridge = createReactClass({
 
   onMessage(event) {
     console.log(event)
-    if (this.props.onBridgeMessage != null && event.nativeEvent != null) {
       this.props.onBridgeMessage(event.nativeEvent.message)
-    }
   },
 
   goForward: function () {
