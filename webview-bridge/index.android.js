@@ -68,7 +68,7 @@ var WebViewBridge = createReactClass({
   },
 
 
-  componentWillMount: function () {
+  componentDidMount: function () {
     DeviceEventEmitter.removeListener('webViewBridgeMessage')
 
 
@@ -125,18 +125,18 @@ var WebViewBridge = createReactClass({
     let { source, ...props } = { ...this.props };
 
     var webView =
-      <RCTWebViewBridge
-        ref={RCT_WEBVIEWBRIDGE_REF}
-        key="webViewKey"
-        javaScriptEnabled={true}
-        {...props}
-        source={source}
-        style={webViewStyles}
-        onLoadingStart={this.onLoadingStart}
-        onLoadingFinish={this.onLoadingFinish}
-        onLoadingError={this.onLoadingError}
-        onMessage={this.onMessage}
-      />;
+        <RCTWebViewBridge
+            ref={RCT_WEBVIEWBRIDGE_REF}
+            key="webViewKey"
+            javaScriptEnabled={true}
+            {...props}
+            source={source}
+            style={webViewStyles}
+            onLoadingStart={this.onLoadingStart}
+            onLoadingFinish={this.onLoadingFinish}
+            onLoadingError={this.onLoadingError}
+            onChange={this.onMessage}
+        />;
 
     return (
       <View style={styles.container}>
