@@ -15,6 +15,8 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -22,16 +24,19 @@ import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.views.webview.events.TopLoadingErrorEvent;
-import com.facebook.react.views.webview.events.TopLoadingFinishEvent;
-import com.facebook.react.views.webview.events.TopLoadingStartEvent;
+import com.reactnativecommunity.webview.events.TopLoadingErrorEvent;
+import com.reactnativecommunity.webview.events.TopLoadingFinishEvent;
+import com.reactnativecommunity.webview.events.TopLoadingStartEvent;
+
 import android.webkit.SslErrorHandler;
 import android.net.http.SslError;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -57,6 +62,12 @@ public class WebViewBridgeManager extends SimpleViewManager<WebViewBridgeManager
 
     private static final String MIME_TEXT_HTML = "text/html";
     private static final String MIME_UNKNOWN = "application/octet-stream";
+
+    protected static final String HTML_ENCODING = "UTF-8";
+    protected static final String HTML_MIME_TYPE = "text/html";
+    protected static final String HTTP_METHOD_POST = "POST";
+    protected static final String BLANK_URL = "about:blank";
+
 
     @Override
     public String getName() {
@@ -177,10 +188,70 @@ public class WebViewBridgeManager extends SimpleViewManager<WebViewBridgeManager
         ((ReactWebView) view).setInjectedOnStartLoadingJavaScript(injectedJavaScript);
     }
 
-    @ReactProp(name = "source")
+/*    @ReactProp(name = "source")
     public void loadUrl(WebView view, String url) {
-        view.loadUrl(url);
+        try {
+            view.loadUrl(url);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }*/
+    @ReactProp(name = "source")
+    public void setSource(WebView view, @Nullable ReadableMap source) {
+        if (source != null) {
+            if (source.hasKey("html")) {
+                String html = source.getString("html");
+                String baseUrl = source.hasKey("baseUrl") ? source.getString("baseUrl") : "";
+                view.loadDataWithBaseURL(baseUrl, html, HTML_MIME_TYPE, HTML_ENCODING, null);
+                return;
+            }
+            if (source.hasKey("uri")) {
+                String url = source.getString("uri");
+                String previousUrl = view.getUrl();
+                if (previousUrl != null && previousUrl.equals(url)) {
+                    return;
+                }
+                if (source.hasKey("method")) {
+                    String method = source.getString("method");
+                    if (method.equalsIgnoreCase(HTTP_METHOD_POST)) {
+                        byte[] postData = null;
+                        if (source.hasKey("body")) {
+                            String body = source.getString("body");
+                            try {
+                                postData = body.getBytes("UTF-8");
+                            } catch (UnsupportedEncodingException e) {
+                                postData = body.getBytes();
+                            }
+                        }
+                        if (postData == null) {
+                            postData = new byte[0];
+                        }
+                        view.postUrl(url, postData);
+                        return;
+                    }
+                }
+                HashMap<String, String> headerMap = new HashMap<>();
+                if (source.hasKey("headers")) {
+                    ReadableMap headers = source.getMap("headers");
+                    ReadableMapKeySetIterator iter = headers.keySetIterator();
+                    while (iter.hasNextKey()) {
+                        String key = iter.nextKey();
+                        if ("user-agent".equals(key.toLowerCase(Locale.ENGLISH))) {
+                            if (view.getSettings() != null) {
+                                view.getSettings().setUserAgentString(headers.getString(key));
+                            }
+                        } else {
+                            headerMap.put(key, headers.getString(key));
+                        }
+                    }
+                }
+                view.loadUrl(url, headerMap);
+                return;
+            }
+        }
+        view.loadUrl(BLANK_URL);
     }
+
 
     @ReactProp(name = "javaScriptEnabled")
     public void javaScriptEnabled(WebView view, Boolean enable) {

@@ -1,7 +1,7 @@
 
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import WebViewBridge from 'react-native-webview-bridge';
+import WebViewBridge from 'react-native-webview-bridge-updated';
 
 const injectScript = `
   (function () {
@@ -43,7 +43,7 @@ export default class Sample2 extends Component {
           onBridgeMessage={this.onBridgeMessage}
           javaScriptEnabled={true}
           injectedJavaScript={injectScript}
-          source={{uri: "https://google.com"}}
+          source={{uri: "https://www.baidu.com"}}
         />
         <WebViewBridge
         ref="webviewbridge2"

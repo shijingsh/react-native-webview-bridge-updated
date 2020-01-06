@@ -8,6 +8,6 @@
   "dependencies": {
     "react": "16.0.0-alpha.6",
     "react-native": "0.43.4",
-    "react-native-webview-bridge": "file:../"
+    "react-native-webview-bridge-updated": "git+https://github.com/shijingsh/react-native-webview-bridge-updated.git"
   }
 }
