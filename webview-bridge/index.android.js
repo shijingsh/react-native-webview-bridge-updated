@@ -28,7 +28,6 @@ var {
   StyleSheet,
   Text,
   View,
-  WebView,
   requireNativeComponent,
   DeviceEventEmitter,
   NativeModules: {
@@ -175,7 +174,7 @@ var WebViewBridge = createReactClass({
       null
     );
   },
-  
+
   loadSource: function (url: string) {
     UIManager.dispatchViewManagerCommand(
       this.getWebViewBridgeHandle(),
