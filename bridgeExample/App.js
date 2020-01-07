@@ -42,6 +42,7 @@ export default class App extends Component {
               onBridgeMessage={this.onBridgeMessage}
               javaScriptEnabled={true}
               injectedJavaScript={injectScript}
+              style={{backgroundColor:'#ffffff',height:300,width:300}}
               source={{uri: "https://www.baidu.com"}}
           />
           <WebViewBridge
@@ -49,6 +50,7 @@ export default class App extends Component {
               onBridgeMessage={this.onBridgeMessage}
               javaScriptEnabled={true}
               injectedJavaScript={injectScript}
+              style={{backgroundColor:'#ffffff',height:300,width:300}}
               source={require('./test.html')}
           />
         </View>
