@@ -162,8 +162,8 @@ public class WebViewBridgeManager extends SimpleViewManager<WebViewBridgeManager
     }
 
     private void sendToBridge(WebView view, String script) {
-//        String script = "WebViewBridge.onMessage('" + message + "');";
-//        String scrip2 = "WebViewBridge.send(\"aa\")";
+        script = "onWebViewBridgeMessage('" + script + "');";
+        //script = "WebViewBridge.send('" + script + "')";
         WebViewBridgeManager.evaluateJavascript(view, script);
     }
 
