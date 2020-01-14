@@ -6,7 +6,8 @@ const injectScript = `
   (function () {
     if (WebViewBridge) {
 
-      WebViewBridge.onMessage = function (message) {
+      window.onWebViewBridgeMessage = function (message) {
+       console.log("---------onWebViewBridgeMessage----------");
         if (message === "hello from react-native") {
           WebViewBridge.send("got the message inside webview");
         }
@@ -26,6 +27,7 @@ export default class App extends Component {
   onBridgeMessage(message) {
     switch (message) {
       case "hello from webview":
+        console.log("---------onBridgeMessage----------hello from webview");
         this.webviewbridge.sendToBridge("hello from react-native");
         break;
       case "got the message inside webview":
@@ -45,14 +47,14 @@ export default class App extends Component {
               style={{backgroundColor:'#ffffff',height:300,width:300}}
               source={{uri: "https://www.baidu.com"}}
           />
-          <WebViewBridge
+{/*          <WebViewBridge
               ref="webviewbridge2"
               onBridgeMessage={this.onBridgeMessage}
               javaScriptEnabled={true}
               injectedJavaScript={injectScript}
               style={{backgroundColor:'#ffffff',height:300,width:300}}
               source={require('./test.html')}
-          />
+          />*/}
         </View>
     );
   }

@@ -13,15 +13,15 @@
  */
 'use strict';
 
-var React = require('react');
-var PropTypes = require('prop-types');
-var createReactClass = require('create-react-class');
-var ReactNative = require('react-native');
-var invariant = require('invariant');
-var keyMirror = require('keymirror');
-var resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
+let React = require('react');
+let PropTypes = require('prop-types');
+let createReactClass = require('create-react-class');
+let ReactNative = require('react-native');
+let invariant = require('invariant');
+let keyMirror = require('keymirror');
+let resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
-var {
+let {
   ReactNativeViewAttributes,
   UIManager,
   EdgeInsetsPropType,
@@ -35,20 +35,20 @@ var {
   }
 } = ReactNative;
 
-var RCT_WEBVIEWBRIDGE_REF = 'webviewbridge';
+let RCT_WEBVIEWBRIDGE_REF = 'webviewbridge';
 
-var WebViewBridgeState = keyMirror({
+let WebViewBridgeState = keyMirror({
   IDLE: null,
   LOADING: null,
   ERROR: null,
 });
 
-var RCTWebViewBridge = requireNativeComponent('RCTWebViewBridge', WebViewBridge);
+let RCTWebViewBridge = requireNativeComponent('RCTWebViewBridge', WebViewBridge);
 
 /**
  * Renders a native WebView.
  */
-var WebViewBridge = createReactClass({
+let WebViewBridge = createReactClass({
 
   propTypes: {
     ...RCTWebViewBridge.propTypes,
@@ -66,7 +66,6 @@ var WebViewBridge = createReactClass({
       startInLoadingState: true,
     };
   },
-
 
   componentDidMount: function () {
     DeviceEventEmitter.removeListener('webViewBridgeMessage')
@@ -91,12 +90,12 @@ var WebViewBridge = createReactClass({
   },
 
   render: function () {
-    var otherView = null;
+    let otherView = null;
 
     if (this.state.viewState === WebViewBridgeState.LOADING) {
       otherView = this.props.renderLoading && this.props.renderLoading();
     } else if (this.state.viewState === WebViewBridgeState.ERROR) {
-      var errorEvent = this.state.lastErrorEvent;
+      let errorEvent = this.state.lastErrorEvent;
       otherView = this.props.renderError && this.props.renderError(
         errorEvent.domain,
         errorEvent.code,
@@ -105,14 +104,14 @@ var WebViewBridge = createReactClass({
       console.error('RCTWebViewBridge invalid state encountered: ' + this.state.loading);
     }
 
-    var webViewStyles = [styles.container, this.props.style];
+    let webViewStyles = [styles.container, this.props.style];
     if (this.state.viewState === WebViewBridgeState.LOADING ||
       this.state.viewState === WebViewBridgeState.ERROR) {
       // if we're in either LOADING or ERROR states, don't show the webView
       webViewStyles.push(styles.hidden);
     }
 
-    var { javaScriptEnabled, domStorageEnabled } = this.props;
+    let { javaScriptEnabled, domStorageEnabled } = this.props;
     if (this.props.javaScriptEnabledAndroid) {
       console.warn('javaScriptEnabledAndroid is deprecated. Use javaScriptEnabled instead');
       javaScriptEnabled = this.props.javaScriptEnabledAndroid;
@@ -124,7 +123,7 @@ var WebViewBridge = createReactClass({
 
     let { source, ...props } = { ...this.props };
 
-    var webView =
+    let webView =
         <RCTWebViewBridge
             ref={RCT_WEBVIEWBRIDGE_REF}
             key="webViewKey"
@@ -206,14 +205,14 @@ var WebViewBridge = createReactClass({
   },
 
   onLoadingStart: function (event) {
-    var onLoadStart = this.props.onLoadStart;
+    let onLoadStart = this.props.onLoadStart;
     onLoadStart && onLoadStart(event);
     this.updateNavigationState(event);
   },
 
   onLoadingError: function (event) {
     event.persist(); // persist this event because we need to store it
-    var { onError, onLoadEnd } = this.props;
+    let { onError, onLoadEnd } = this.props;
     onError && onError(event);
     onLoadEnd && onLoadEnd(event);
 
@@ -224,7 +223,7 @@ var WebViewBridge = createReactClass({
   },
 
   onLoadingFinish: function (event) {
-    var { onLoad, onLoadEnd } = this.props;
+    let { onLoad, onLoadEnd } = this.props;
     onLoad && onLoad(event);
     onLoadEnd && onLoadEnd(event);
     this.setState({
@@ -235,7 +234,7 @@ var WebViewBridge = createReactClass({
 });
 
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     flex: 1,
   },

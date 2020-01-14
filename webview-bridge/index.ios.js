@@ -15,15 +15,15 @@
 'use strict';
 
 
-var React = require('react');
-var PropTypes = require('prop-types');
-var createReactClass = require('create-react-class');
-var ReactNative = require('react-native');
-var invariant = require('invariant');
-var keyMirror = require('keymirror');
-var resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
+let React = require('react');
+let PropTypes = require('prop-types');
+let createReactClass = require('create-react-class');
+let ReactNative = require('react-native');
+let invariant = require('invariant');
+let keyMirror = require('keymirror');
+let resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
-var {
+let {
   ActivityIndicator,
   EdgeInsetsPropType,
   StyleSheet,
@@ -37,18 +37,18 @@ var {
   }
 } = ReactNative;
 
-var BGWASH = 'rgba(255,255,255,0.8)';
-var RCT_WEBVIEWBRIDGE_REF = 'webviewbridge';
+let BGWASH = 'rgba(255,255,255,0.8)';
+let RCT_WEBVIEWBRIDGE_REF = 'webviewbridge';
 
-var RCTWebViewBridgeManager = WebViewBridgeManager;
+let RCTWebViewBridgeManager = WebViewBridgeManager;
 
-var WebViewBridgeState = keyMirror({
+let WebViewBridgeState = keyMirror({
   IDLE: null,
   LOADING: null,
   ERROR: null,
 });
 
-var NavigationType = {
+let NavigationType = {
   click: RCTWebViewBridgeManager.NavigationType.LinkClicked,
   formsubmit: RCTWebViewBridgeManager.NavigationType.FormSubmitted,
   backforward: RCTWebViewBridgeManager.NavigationType.BackForward,
@@ -57,7 +57,7 @@ var NavigationType = {
   other: RCTWebViewBridgeManager.NavigationType.Other,
 };
 
-var JSNavigationScheme = RCTWebViewBridgeManager.JSNavigationScheme;
+let JSNavigationScheme = RCTWebViewBridgeManager.JSNavigationScheme;
 
 type ErrorEvent = {
   domain: any;
@@ -67,12 +67,12 @@ type ErrorEvent = {
 
 type Event = Object;
 
-var defaultRenderLoading = () => (
+let defaultRenderLoading = () => (
   <View style={styles.loadingView}>
     <ActivityIndicator/>
   </View>
 );
-var defaultRenderError = (errorDomain, errorCode, errorDesc) => (
+let defaultRenderError = (errorDomain, errorCode, errorDesc) => (
   <View style={styles.errorContainer}>
     <Text style={styles.errorTextTitle}>
       Error loading page
@@ -92,7 +92,7 @@ var defaultRenderError = (errorDomain, errorCode, errorDesc) => (
 /**
  * Renders a native WebView.
  */
-var WebViewBridge = createReactClass({
+let WebViewBridge = createReactClass({
   statics: {
     JSNavigationScheme: JSNavigationScheme,
     NavigationType: NavigationType,
@@ -126,12 +126,12 @@ var WebViewBridge = createReactClass({
   },
 
   render: function() {
-    var otherView = null;
+    let otherView = null;
 
     if (this.state.viewState === WebViewBridgeState.LOADING) {
       otherView = (this.props.renderLoading || defaultRenderLoading)();
     } else if (this.state.viewState === WebViewBridgeState.ERROR) {
-      var errorEvent = this.state.lastErrorEvent;
+      let errorEvent = this.state.lastErrorEvent;
       invariant(
         errorEvent != null,
         'lastErrorEvent expected to be non-null'
@@ -147,20 +147,20 @@ var WebViewBridge = createReactClass({
       );
     }
 
-    var webViewStyles = [styles.container, styles.webView, this.props.style];
+    let webViewStyles = [styles.container, styles.webView, this.props.style];
     if (this.state.viewState === WebViewBridgeState.LOADING ||
       this.state.viewState === WebViewBridgeState.ERROR) {
       // if we're in either LOADING or ERROR states, don't show the webView
       webViewStyles.push(styles.hidden);
     }
 
-    var onShouldStartLoadWithRequest = this.props.onShouldStartLoadWithRequest && ((event: Event) => {
-      var shouldStart = this.props.onShouldStartLoadWithRequest &&
+    let onShouldStartLoadWithRequest = this.props.onShouldStartLoadWithRequest && ((event: Event) => {
+      let shouldStart = this.props.onShouldStartLoadWithRequest &&
         this.props.onShouldStartLoadWithRequest(event.nativeEvent);
       RCTWebViewBridgeManager.startLoadWithResult(!!shouldStart, event.nativeEvent.lockIdentifier);
     });
 
-    var {javaScriptEnabled, domStorageEnabled} = this.props;
+    let {javaScriptEnabled, domStorageEnabled} = this.props;
     if (this.props.javaScriptEnabledAndroid) {
       console.warn('javaScriptEnabledAndroid is deprecated. Use javaScriptEnabled instead');
       javaScriptEnabled = this.props.javaScriptEnabledAndroid;
@@ -170,7 +170,7 @@ var WebViewBridge = createReactClass({
       domStorageEnabled = this.props.domStorageEnabledAndroid;
     }
 
-    var onBridgeMessage = (event: Event) => {
+    let onBridgeMessage = (event: Event) => {
       const onBridgeMessageCallback = this.props.onBridgeMessage;
       if (onBridgeMessageCallback) {
         const messages = event.nativeEvent.messages;
@@ -184,7 +184,7 @@ var WebViewBridge = createReactClass({
     delete props.onBridgeMessage;
     delete props.onShouldStartLoadWithRequest;
 
-    var webView =
+    let webView =
       <RCTWebViewBridge
         ref={RCT_WEBVIEWBRIDGE_REF}
         key="webViewKey"
@@ -249,14 +249,14 @@ var WebViewBridge = createReactClass({
   },
 
   onLoadingStart: function(event: Event) {
-    var onLoadStart = this.props.onLoadStart;
+    let onLoadStart = this.props.onLoadStart;
     onLoadStart && onLoadStart(event);
     this.updateNavigationState(event);
   },
 
   onLoadingError: function(event: Event) {
     event.persist(); // persist this event because we need to store it
-    var {onError, onLoadEnd} = this.props;
+    let {onError, onLoadEnd} = this.props;
     onError && onError(event);
     onLoadEnd && onLoadEnd(event);
     console.warn('Encountered an error loading page', event.nativeEvent);
@@ -268,7 +268,7 @@ var WebViewBridge = createReactClass({
   },
 
   onLoadingFinish: function(event: Event) {
-    var {onLoad, onLoadEnd} = this.props;
+    let {onLoad, onLoadEnd} = this.props;
     onLoad && onLoad(event);
     onLoadEnd && onLoadEnd(event);
     this.setState({
@@ -278,7 +278,7 @@ var WebViewBridge = createReactClass({
   },
 });
 
-var RCTWebViewBridge = requireNativeComponent('RCTWebViewBridge', WebViewBridge, {
+let RCTWebViewBridge = requireNativeComponent('RCTWebViewBridge', WebViewBridge, {
   nativeOnly: {
     onLoadingStart: true,
     onLoadingError: true,
@@ -286,7 +286,7 @@ var RCTWebViewBridge = requireNativeComponent('RCTWebViewBridge', WebViewBridge,
   },
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     flex: 1,
   },
