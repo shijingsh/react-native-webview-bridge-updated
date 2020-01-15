@@ -9,7 +9,7 @@ I have been testing and reading a lot of way to safely create a bridge between r
 
 In order to use this extension, you have to do the following steps:
 
-in your react-native project, run `npm install react-native-webview-bridge --save`
+in your react-native project, run `npm install react-native-webview-bridge-updated --save`
 
 ### iOS
 
@@ -61,14 +61,14 @@ protected List<ReactPackage> getPackages() {
 > you might have multiple 3rd party libraries, make sure that you don't create multiple include.
 
 ```
-include ':app', ':react-native-webview-bridge'
-project(':react-native-webview-bridge').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview-bridge/android')
+include ':app', ':react-native-webview-bridge-updated'
+project(':react-native-webview-bridge-updated').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview-bridge-updated/android')
 ```
 
 4. edit `android/app/build.gradle` and add the following line inside `dependencies`
 
 ```
-compile project(':react-native-webview-bridge')
+compile project(':react-native-webview-bridge-updated')
 ```
 
 5. run `react-native run-android` to see if everything is compilable.
@@ -80,13 +80,13 @@ just import the module with one of your choices way:
 ** CommonJS style **
 
 ```js
-var WebViewBridge = require('react-native-webview-bridge');
+var WebViewBridge = require('react-native-webview-bridge-updated');
 ```
 
 ** ES6/ES2015 style **
 
 ```js
-import WebViewBridge from 'react-native-webview-bridge';
+import WebViewBridge from 'react-native-webview-bridge-updated';
 ```
 
 `WebViewBridge` is an extension of `WebView`. It injects special script into any pages once it loads. Also it extends the functionality of `WebView` by adding 1 new method and 1 new props.
@@ -135,7 +135,7 @@ const injectScript = `
   (function () {
                     if (WebViewBridge) {
 
-                      WebViewBridge.onMessage = function (message) {
+                      window.onWebViewBridgeMessage = function (message) {
                         if (message === "hello from react-native") {
                           WebViewBridge.send("got the message inside webview");
                         }
