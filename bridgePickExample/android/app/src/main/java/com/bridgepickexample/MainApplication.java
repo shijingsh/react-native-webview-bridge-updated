@@ -10,6 +10,9 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import com.mg.app.PickerPackage;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
+import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -26,9 +29,9 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
-         //   packages.add(new RNCWebViewPackage());
-          //  packages.add(new WebViewBridgePackage());
-
+            packages.add(new RNCWebViewPackage());
+            packages.add(new WebViewBridgePackage());
+            packages.add(new PickerPackage());
           return packages;
         }
 

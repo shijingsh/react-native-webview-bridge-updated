@@ -206,6 +206,10 @@ dependencies {
         exclude group:'com.facebook.flipper'
     }
 
+    implementation project(':react-native-webview')
+    implementation project(':react-native-webview-bridge-updated')
+    implementation project(':react-native-customized-image-picker')
+
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")

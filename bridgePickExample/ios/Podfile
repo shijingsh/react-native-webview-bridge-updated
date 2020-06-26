@@ -79,6 +79,8 @@ target 'bridgePickExample' do
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
+  pod 'RNCustomizedImagePicker', :path => '../node_modules/react-native-customized-image-picker'
+
   target 'bridgePickExampleTests' do
     inherit! :complete
     # Pods for testing
